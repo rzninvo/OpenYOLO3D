@@ -47,9 +47,14 @@ WORKDIR /workspace/OpenYOLO3D
 # ----------------------------------------------------------------------
 COPY environment.yml ./environment.yml
 
+# Accept Anaconda TOS for required channels
+RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+
+# Now create the environment
 RUN conda env create -f environment.yml && \
     conda clean -afy
-
+    
 # Set default env
 ENV CONDA_DEFAULT_ENV=openyolo3d
 ENV PATH=/opt/conda/envs/openyolo3d/bin:$PATH
