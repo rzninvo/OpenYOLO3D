@@ -72,7 +72,8 @@ RUN python -m pip install --no-cache-dir \
       future \
       pyviz3d \
       transformers==4.30.0 \
-      shapely
+      shapely \
+      supervision==0.19.0
 
 # 8. Install Detectron2
 RUN python -m pip install --no-cache-dir \
