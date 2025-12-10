@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ----------------------------------------------------------------------
 # 2. Install Miniconda
 # ----------------------------------------------------------------------
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py310_23.9.0-0-Linux-x86_64.sh -O /tmp/miniconda.sh && \
     bash /tmp/miniconda.sh -b -p /opt/conda && \
     rm /tmp/miniconda.sh
 
@@ -47,10 +47,6 @@ WORKDIR /workspace/OpenYOLO3D
 # ----------------------------------------------------------------------
 COPY environment.yml ./environment.yml
 
-# Accept Anaconda TOS for required channels
-RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
-    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
-
 # Now create the environment
 RUN conda env create -f environment.yml && \
     conda clean -afy
@@ -59,9 +55,6 @@ RUN conda env create -f environment.yml && \
 ENV CONDA_DEFAULT_ENV=openyolo3d
 ENV PATH=/opt/conda/envs/openyolo3d/bin:$PATH
 
-# Optional: keep pip/setuptools reasonable for old CUDA stack
-RUN python -m pip install --upgrade "pip<24.0" && \
-    python -m pip install "setuptools<=65.6.3" "wheel"
 
 # ----------------------------------------------------------------------
 # 4. Copy the project AFTER env creation to leverage Docker cache

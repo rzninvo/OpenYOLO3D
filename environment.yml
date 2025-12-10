@@ -56,7 +56,7 @@ dependencies:
   - xz=5.2.10=h5eee18b_1
   - zlib=1.2.13=h5eee18b_0
   - zstandard=0.19.0=py310h5eee18b_0
-  - pip
+  - pip=24.0
   - pip:
       - absl-py==1.4.0
       - addict==2.4.0
@@ -157,7 +157,7 @@ dependencies:
       - pure-eval==0.2.2
       - pyasn1==0.5.0
       - pyasn1-modules==0.3.0
-      - pycocotools==2.0.4
+      - pycocotools==2.0.6
       - pydantic==1.10.7
       - pydeprecate==0.3.2
       - pygments==2.15.1
