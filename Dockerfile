@@ -117,21 +117,27 @@ RUN pip install --no-cache-dir pytorch-lightning==1.7.2 && \
 # ----------------------------------------------------------------------
 # 8. YOLO-World, mmdet, mmyolo, mmcv, open3d, etc.
 # ----------------------------------------------------------------------
-WORKDIR /workspace/OpenYOLO3D/models/YOLO-World
-RUN pip install --no-cache-dir -e .
+WORKDIR /workspace/OpenYOLO3D
 
+# 1. Install OpenMIM first
+RUN pip install --no-cache-dir openmim
+
+# 2. Force install the correct MMCV binary for CUDA 11.3
+#    Note: mmcv-full is often safer than mmcv for detection tasks, 
+#    but here we stick to version 2.0.0 as requested.
+RUN mim install "mmcv==2.0.0"
+
+# 3. Install other heavy deps that might trigger builds
+RUN pip install --no-cache-dir mmdet==3.0.0 mmyolo==0.6.0
+
+# 4. NOW install YOLO-World (it will find the packages above and skip building them)
+WORKDIR /workspace/OpenYOLO3D/models/YOLO-World
+RUN pip install --no-cache-dir --no-build-isolation -e .
+
+# 5. Install remaining pure-python deps
 WORKDIR /workspace/OpenYOLO3D
 RUN pip install --no-cache-dir \
-        mmyolo==0.6.0 \
-        mmdet==3.0.0 \
         plyfile \
-        openmim && \
-    pip install --no-cache-dir \
-        torch==1.12.1+cu113 \
-        torchvision==0.13.1+cu113 \
-        --extra-index-url https://download.pytorch.org/whl/cu113 && \
-    mim install mmcv==2.0.0 && \
-    pip install --no-cache-dir \
         open3d \
         pillow==9.1.0 \
         pyviz3d \
